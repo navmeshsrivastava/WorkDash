@@ -1,0 +1,219 @@
+main {
+  max-width: 880px;
+  /* border: 2px solid black; */
+  margin: 0 auto;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+a:hover {
+  opacity: 0.9;
+}
+
+/* Index Page Design */
+.tasks {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 24px;
+  margin: 20px 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.tasks-info .title {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0;
+  color: #2c3e50;
+}
+
+.tasks-info .description {
+  font-size: 16px;
+  font-weight: 400;
+  margin: 8px 0;
+  color: #555;
+}
+
+.tasks-info .deadline {
+  font-size: 14px;
+  color: #888;
+  margin: 0;
+}
+
+.posted-by {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.acc-icon {
+  font-size: 40px;
+  color: #444;
+}
+
+.acc-icon svg {
+  font-size: 40px;
+  display: flex;
+  align-items: center;
+}
+
+.posted-by p:first-child {
+  margin: 0;
+  font-weight: 600;
+}
+
+.posted-by p:last-child {
+  margin: 0;
+  font-size: 14px;
+  color: #666;
+}
+
+.tasks-tools {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.attachments {
+  font-size: 14px;
+  color: #555;
+}
+
+.view-task-btn {
+  text-transform: none;
+  background-color: #1976d2;
+  color: white;
+  padding: 6px 16px;
+  border-radius: 6px;
+}
+
+.view-task-btn:hover {
+  background-color: #3ea2ff;
+  color: #fff;
+}
+
+/* Navbar Design */
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(135deg, #1565c0, #1e88e5);
+  color: white;
+  padding: 25px 32px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.left,
+.right {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.app {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.app-icon svg {
+  font-size: 30px;
+  color: #ffeb3b;
+}
+
+.app-name i {
+  font-size: 24px;
+  font-weight: 600;
+  color: white;
+}
+
+.options,
+.right {
+  display: flex;
+  gap: 20px;
+}
+
+.options div,
+.right div {
+  cursor: pointer;
+  padding: 6px 14px;
+  border-radius: 6px;
+  transition: background 0.25s ease;
+}
+
+.options div:hover,
+.right div:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Register Page Design */
+
+.register-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.register-form {
+  background-color: #fff;
+  padding: 30px 40px;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.register-form h2 {
+  text-align: center;
+  color: #1565c0;
+  margin-bottom: 10px;
+}
+
+.register-form input {
+  padding: 12px 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+  transition: 0.3s;
+}
+
+.register-form input:focus {
+  border-color: #1565c0;
+  box-shadow: 0 0 0 3px rgba(21, 101, 192, 0.2);
+}
+
+.register-form button {
+  padding: 12px;
+  background: #1565c0;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.register-form button:hover {
+  background: #0d47a1;
+}
+
+/* Profile Page Design */
+.profile-page {
+  width: 20%;
+  margin: 20px auto;
+}
