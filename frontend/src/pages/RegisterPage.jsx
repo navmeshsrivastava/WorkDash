@@ -9,6 +9,7 @@ export default function RegisterPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [redirect, setRedirect] = useState(false);
+  const { setUserInfo } = useContext(UserContext);
 
   async function register(ev) {
     ev.preventDefault();
@@ -19,16 +20,17 @@ export default function RegisterPage() {
       credentials: 'include',
     });
     if (response.ok) {
-      alert('Registration successful');
+      const data = await response.json();
+      setUserInfo(data);
       setRedirect(true);
+      alert('Registration Successful.');
     } else {
       alert('Registration Failed.');
     }
   }
 
   if (redirect) {
-    window.location.href = '/';
-    return null;
+    return <Navigate to={'/'} />;
   }
 
   return (
@@ -49,13 +51,11 @@ export default function RegisterPage() {
           value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
-        <input
-          type="text"
-          placeholder="Role"
-          required
-          value={role}
-          onChange={(e) => setRole(e.target.value)}
-        />
+        <select value={role} onChange={(e) => setRole(e.target.value)} required>
+          <option value="">Select Role</option>
+          <option value="Manager">Manager</option>
+          <option value="Employee">Employee</option>
+        </select>
         <input
           type="email"
           placeholder="Email"

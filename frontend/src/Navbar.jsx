@@ -11,13 +11,16 @@ export default function Navbar() {
     const fetchUserInfo = async () => {
       try {
         const response = await fetch('http://localhost:4000/load', {
+          method: 'GET',
           credentials: 'include',
         });
 
         if (response.ok) {
           const data = await response.json();
-          console.log(data);
           setUserInfo(data);
+        } else if (response.status === 401) {
+          setUserInfo(null);
+          console.log('No token is provided or Unauthorized');
         } else {
           console.error('Failed to load user info. Status:', response.status);
         }
@@ -58,7 +61,7 @@ export default function Navbar() {
         ) : (
           <>
             <Link to="/login">
-              <div className="login">Login</div>
+              <div className="login-route">Login</div>
             </Link>
             <Link to="/register">
               <div className="register">Register</div>

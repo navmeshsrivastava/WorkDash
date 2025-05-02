@@ -8,7 +8,7 @@ export default function ProfilePage() {
   const [redirect, setRedirect] = useState(false);
 
   async function logout() {
-    await fetch('http://localhost:3000/logout', {
+    await fetch('http://localhost:4000/logout', {
       method: 'POST',
       credentials: 'include',
     });

@@ -1,6 +1,5 @@
 main {
   max-width: 880px;
-  /* border: 2px solid black; */
   margin: 0 auto;
 }
 
@@ -158,62 +157,187 @@ a:hover {
 /* Register Page Design */
 
 .register-container {
-  min-height: 100vh;
+  height: 600px;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px;
+  padding: 2rem;
+  box-sizing: border-box;
+  margin: 20px auto;
 }
 
 .register-form {
-  background-color: #fff;
-  padding: 30px 40px;
-  border-radius: 16px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
   width: 100%;
-  max-width: 400px;
+  max-width: 420px;
+  padding: 2rem;
+  border-radius: 16px;
+  background-color: #ffffffcc;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(200, 200, 200, 0.3);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 1.2rem;
+  box-sizing: border-box;
 }
 
 .register-form h2 {
   text-align: center;
-  color: #1565c0;
-  margin-bottom: 10px;
+  margin-bottom: 0.5rem;
+  font-size: 1.6rem;
+  color: #2c2c2c;
+  font-weight: 600;
 }
 
 .register-form input {
-  padding: 12px 15px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 10px;
   font-size: 1rem;
-  outline: none;
-  transition: 0.3s;
+  box-sizing: border-box;
+  width: 100%;
+  background-color: #fafafa;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .register-form input:focus {
-  border-color: #1565c0;
-  box-shadow: 0 0 0 3px rgba(21, 101, 192, 0.2);
+  border-color: #6c63ff;
+  box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.2);
+  outline: none;
+  background-color: #fff;
+}
+
+.register-form select {
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  width: 100%;
+  background-color: #fafafa;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  box-sizing: border-box;
+  appearance: none;
+  background-image: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 12 12%22 width=%2212%22 height=%2212%22%3E%3Cpath d=%22M0 4l6 6 6-6%22 fill=%22none%22 stroke=%22%23999%22 stroke-width=%221.5%22/%3E%3C/svg%3E');
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 8px;
+}
+
+.register-form select:focus {
+  border-color: #6c63ff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+  outline: none;
+  background-color: #fff;
+}
+
+.register-form select::-ms-expand {
+  display: none;
 }
 
 .register-form button {
-  padding: 12px;
-  background: #1565c0;
+  padding: 0.85rem;
+  background: linear-gradient(to right, #6c63ff, #857cff);
   color: #fff;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   font-size: 1rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: 0.3s;
+  transition: background 0.3s ease, transform 0.2s ease;
 }
 
 .register-form button:hover {
-  background: #0d47a1;
+  background: linear-gradient(to right, #5d56e5, #776dff);
+  transform: translateY(-2px);
 }
 
 /* Profile Page Design */
 .profile-page {
   width: 20%;
   margin: 20px auto;
+}
+
+/* Login Page Design */
+.login-page {
+  height: 600px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  box-sizing: border-box;
+  margin: 20px auto;
+}
+
+.login {
+  width: 100%;
+  max-width: 400px;
+  padding: 2rem;
+  border: 1px solid rgba(200, 200, 200, 0.3);
+  border-radius: 10px;
+  background-color: #fff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  box-sizing: border-box;
+}
+
+.login h1 {
+  text-align: center;
+  margin-bottom: 1rem;
+  font-size: 1.8rem;
+  color: #333;
+}
+
+.login input {
+  padding: 0.75rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.login input:focus {
+  border-color: #6c63ff;
+  box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.2);
+  outline: none;
+  background-color: #fff;
+}
+
+.login button {
+  padding: 0.75rem;
+  background: linear-gradient(to right, #6c63ff, #857cff);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.login button:hover {
+  background: linear-gradient(to right, #5d56e5, #776dff);
+  transform: translateY(-2px);
+}
+
+.footer-links {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.footer-links a {
+  color: #776dff;
+  text-decoration: none;
+}
+
+.footer-links a:hover {
+  text-decoration: underline;
+}
+
+.footer-links p {
+  font-size: 0.9rem;
+  color: #555;
 }
