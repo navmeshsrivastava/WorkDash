@@ -35,29 +35,36 @@ export default function LoginPage() {
   if (redirect) {
     return <Navigate to={'/'} />;
   }
+
   return (
-    <div className="login-page">
-      <form className="login" onSubmit={login}>
-        <h1>Login</h1>
-        <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(evt) => setUsername(evt.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(evt) => setPassword(evt.target.value)}
-        />
-        <button type="submit">Login</button>
-        <div className="footer-links">
+    <div className="login-container">
+      <div className="login-form">
+        <h2>Login</h2>
+        <form onSubmit={login}>
+          <label htmlFor="username">Username</label>
+          <input
+            type="text"
+            id="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+          <label htmlFor="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <button type="submit">Login</button>
+        </form>
+        <div className="signup-link">
           <p>
             Don't have an account? <a href="/register">Sign Up</a>
           </p>
         </div>
-      </form>
+      </div>
     </div>
   );
 }

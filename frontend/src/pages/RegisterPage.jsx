@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useState, useContext } from 'react';
 import { Navigate } from 'react-router-dom';
 import { UserContext } from '../UserContext';
 
@@ -35,43 +35,71 @@ export default function RegisterPage() {
 
   return (
     <div className="register-container">
-      <form className="register-form" onSubmit={register}>
+      <div className="register-form">
         <h2>Create Account</h2>
-        <input
-          type="text"
-          placeholder="Name"
-          required
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="Username"
-          required
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <select value={role} onChange={(e) => setRole(e.target.value)} required>
-          <option value="">Select Role</option>
-          <option value="Manager">Manager</option>
-          <option value="Employee">Employee</option>
-        </select>
-        <input
-          type="email"
-          placeholder="Email"
-          required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          required
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button type="submit">Register</button>
-      </form>
+        <form onSubmit={register}>
+          <div className="form-group">
+            <label htmlFor="name">Name</label>
+            <input
+              type="text"
+              id="name"
+              required
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="username">Username</label>
+            <input
+              type="text"
+              id="username"
+              required
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="role">Role</label>
+            <select
+              id="role"
+              required
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+            >
+              <option value="">Select Role</option>
+              <option value="Manager">Manager</option>
+              <option value="Project Manager">Project Manager</option>
+              <option value="Team Lead">Team Lead</option>
+              <option value="Product Manager">Product Manager</option>
+              <option value="HR Manager">HR Manager</option>
+              <option value="Employee">Employee</option>
+            </select>
+          </div>
+          <div className="form-group">
+            <label htmlFor="email">Email</label>
+            <input
+              type="email"
+              id="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+          <button type="submit" className="register-button">
+            Register
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

@@ -1,53 +1,47 @@
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { Button } from '@mui/material';
+import Tasks from '../Tasks';
+import UploadIcon from '@mui/icons-material/Upload';
+import Button from '@mui/material/Button';
+import { useContext, useEffect, useState } from 'react';
+import { UserContext } from '../UserContext';
+import { Link } from 'react-router-dom';
 
 export default function IndexPage() {
+  const { userInfo } = useContext(UserContext);
+  const [tasks, setTasks] = useState(null);
+  useEffect(() => {
+    const loadTasks = async () => {
+      const response = await fetch('http://localhost:4000/task', {
+        method: 'GET',
+      });
+      const tasks = await response.json();
+      setTasks(tasks);
+    };
+    loadTasks();
+  }, []);
   return (
     <>
-      <div className="tasks">
-        <div className="tasks-info">
-          <h2 className="title">Website Redesign Project</h2>
-          <h5 className="description">
-            Redesign the company website with new branding guidelines
-          </h5>
-          <p className="deadline">Deadline: June 15, 2023</p>
-        </div>
-        <div className="posted-by">
-          <div className="acc-icon">
-            <AccountCircleIcon />
+      {userInfo && userInfo.role !== 'Employee' ? (
+        <Link to={'/upload'}>
+          <div style={{ position: 'relative', height: '55px' }}>
+            <Button
+              variant="outlined"
+              startIcon={<UploadIcon />}
+              sx={{
+                position: 'absolute',
+                top: '20px',
+                right: '20px',
+                borderRadius: '25px',
+              }}
+            >
+              Upload task
+            </Button>
           </div>
-          <div>
-            <p>Jane Doe</p>
-            <p>Managing Director</p>
-          </div>
-        </div>
-        <div className="tasks-tools">
-          <div className="attachments">3 attachements</div>
-          <Button className="view-task-btn">View Details</Button>
-        </div>
-      </div>
-      <div className="tasks">
-        <div className="tasks-info">
-          <h2 className="title">Website Redesign Project</h2>
-          <h5 className="description">
-            Redesign the company website with new branding guidelines
-          </h5>
-          <p className="deadline">Deadline: June 15, 2023</p>
-        </div>
-        <div className="posted-by">
-          <div className="acc-icon">
-            <AccountCircleIcon />
-          </div>
-          <div>
-            <p>Jane Doe</p>
-            <p>Managing Director</p>
-          </div>
-        </div>
-        <div className="tasks-tools">
-          <div className="attachments">3 attachements</div>
-          <Button className="view-task-btn">View Details</Button>
-        </div>
-      </div>
+        </Link>
+      ) : (
+        <></>
+      )}
+
+      <Tasks tasks={tasks} />
     </>
   );
 }

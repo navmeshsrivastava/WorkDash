@@ -8,6 +8,7 @@ const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
 
 const User = require('./models/userModel');
+const Task = require('./models/taskModel');
 const salt = bcrypt.genSaltSync(10);
 
 app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
@@ -86,5 +87,67 @@ app.post('/login', async (req, res) => {
     res.status(500).json('Internal Server Error');
   }
 });
+
+app.post('/task', (req, res) => {
+  const { token } = req.cookies;
+
+  if (!token) {
+    return res.status(401).json({ error: 'No token provided' });
+  }
+
+  const { title, description, deadline } = req.body;
+
+  if (!title || !description || !deadline) {
+    return res.status(400).json({ error: 'Missing required fields' });
+  }
+
+  jwt.verify(token, process.env.JWT_SECRET, {}, async (err, info) => {
+    if (err) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    const task = await Task.create({
+      title,
+      description,
+      deadline,
+      manager: info.id,
+    });
+
+    res.send(task);
+  });
+});
+
+app.get('/task', async (req, res) => {
+  try {
+    const tasks = await Task.find()
+      .sort({ createdAt: -1 })
+      .populate('manager', 'name role email');
+    res.status(200).json(tasks);
+  } catch (error) {
+    console.error('Failed to fetch tasks:', error);
+    res.status(500).json({ error: 'Failed to fetch tasks' });
+  }
+});
+
+app.get('/task/:taskId', async (req, res) => {
+  const { taskId } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(taskId)) {
+    return res.status(400).json({ error: 'Invalid task ID' });
+  }
+
+  try {
+    const task = await Task.findById(taskId).populate(
+      'manager',
+      'name role email'
+    );
+    if (!task) return res.status(404).json({ error: 'Task not found' });
+
+    res.status(200).json(task);
+  } catch (error) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+// Visit Logout function
 
 app.listen(4000);
