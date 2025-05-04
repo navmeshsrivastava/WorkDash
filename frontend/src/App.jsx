@@ -9,6 +9,7 @@ import LoginPage from './pages/LoginPage';
 import UploadTaskPage from './pages/UploadTaskPage';
 import SingleTaskPage from './pages/SingleTaskPage';
 import HandleTaskPage from './HandleTask';
+import TasksCreatedPage from './pages/TasksCreatedPage';
 
 function App() {
   return (
@@ -22,6 +23,10 @@ function App() {
           <Route path={'/upload'} element={<UploadTaskPage />}></Route>
           <Route path={'/task/:taskId'} element={<SingleTaskPage />}></Route>
           <Route path={'/task/:taskId/do'} element={<HandleTaskPage />}></Route>
+          <Route
+            path={'/task/created/:userId'}
+            element={<TasksCreatedPage />}
+          ></Route>
         </Route>
       </Routes>
     </UserContextProvider>

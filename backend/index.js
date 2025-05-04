@@ -113,6 +113,10 @@ app.post('/task', (req, res) => {
       manager: info.id,
     });
 
+    const user = await User.findById(info.id);
+    user.tasksPosted.push(task._id);
+    await user.save();
+
     res.send(task);
   });
 });
@@ -121,7 +125,7 @@ app.get('/task', async (req, res) => {
   try {
     const tasks = await Task.find()
       .sort({ createdAt: -1 })
-      .populate('manager', 'name role email');
+      .populate('manager', 'name role email _id');
     res.status(200).json(tasks);
   } catch (error) {
     console.error('Failed to fetch tasks:', error);
@@ -139,7 +143,7 @@ app.get('/task/:taskId', async (req, res) => {
   try {
     const task = await Task.findById(taskId).populate(
       'manager',
-      'name role email'
+      'name role email _id'
     );
     if (!task) return res.status(404).json({ error: 'Task not found' });
 
@@ -148,6 +152,68 @@ app.get('/task/:taskId', async (req, res) => {
     res.status(500).json({ error: 'Server error' });
   }
 });
+
+app.post('/task/:taskId', async (req, res) => {
+  try {
+    const { taskId } = req.params;
+    const { userId, solution } = req.body;
+
+    if (!userId || !solution) {
+      return res
+        .status(400)
+        .json({ error: 'userId and solution are required' });
+    }
+
+    const task = await Task.findById(taskId);
+    if (!task) {
+      return res.status(404).json({ error: 'Task not found' });
+    }
+
+    if (task.manager.toString() === userId) {
+      return res
+        .status(400)
+        .json({ error: 'Task owner cannot do their own task' });
+    }
+
+    const alreadyDone = task.doneBy.some(
+      (entry) => entry.user.toString() === userId
+    );
+    if (alreadyDone) {
+      return res
+        .status(400)
+        .json({ error: 'Task already submitted by this user' });
+    }
+
+    task.doneBy.push({ user: userId, solution });
+    await task.save();
+
+    res.status(200).json(task.doneBy);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+app.get('/task/created/:userId', async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const user = await User.findById(userId).populate({
+      path: 'tasksPosted',
+      populate: {
+        path: 'doneBy.user', // path to populate inside doneBy array
+        model: 'user', // assuming the model name is User
+        select: 'name email', // optional: pick fields you want
+      },
+    });
+
+    res.json({ tasksPosted: user.tasksPosted });
+  } catch (error) {
+    console.error('Error fetching tasks:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 // Visit Logout function
 
 app.listen(4000);

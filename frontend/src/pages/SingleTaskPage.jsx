@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { formatDate } from '../helper';
-import { Button } from '@mui/material';
 import { UserContext } from '../UserContext';
 import './SingleTaskPage.css';
 
@@ -9,6 +8,9 @@ export default function SingleTaskPage() {
   const { taskId } = useParams();
   const [task, setTask] = useState(null);
   const { userInfo } = useContext(UserContext);
+  const [isDone, setIsDone] = useState(false);
+  const [isOwner, setIsOwner] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const loadTask = async () => {
@@ -18,34 +20,49 @@ export default function SingleTaskPage() {
       });
       const data = await response.json();
       setTask(data);
+
+      if (userInfo?.id) {
+        const isManager = data.manager._id === userInfo.id;
+        setIsOwner(isManager);
+      }
+
+      if (userInfo?.id && data.doneBy?.length) {
+        const isTaskDone = data.doneBy.some((obj) => obj.user === userInfo.id);
+        setIsDone(isTaskDone);
+      }
+
+      setLoading(false);
     };
+
     loadTask();
-  }, []);
+  }, [taskId, userInfo]);
 
   return (
     <div className="task-page-wrapper">
-      {task ? (
+      {loading ? (
+        <p className="loading-text">🔄 Loading task data...</p>
+      ) : task ? (
         <>
-          <h1 className="task-heading">📝 {task.title}</h1>
+          <h1 className="task-heading">{task.title}</h1>
 
           <div className="task-description-card">
-            <h2>📘 Description</h2>
-            <p>{task.description || 'No description provided 😶'}</p>
+            <h2>Description</h2>
+            <p>{task.description || 'No description provided'}</p>
           </div>
 
           <div className="task-info-wrapper">
             <div className="task-info-section">
-              <h3 className="section-title">📌 Task Info</h3>
+              <h3>Task Info</h3>
               <div className="info-box">
                 🗓️ <strong>Deadline:</strong> {formatDate(task.deadline)}
               </div>
               <div className="info-box">
-                📋 <strong>Status:</strong> {task.status || 'Not specified 🚫'}
+                📋 <strong>Status:</strong> {task.status || 'Not specified'}
               </div>
             </div>
 
             <div className="task-info-section">
-              <h3 className="section-title">👤 Posted By</h3>
+              <h3>Posted By</h3>
               <div className="info-box">
                 🙋 <strong>Name:</strong> {task.manager?.name || 'Unknown'}
               </div>
@@ -60,16 +77,36 @@ export default function SingleTaskPage() {
             </div>
           </div>
 
-          {userInfo?.id && (
-            <div className="task-action">
-              <Link to={`/task/${taskId}/do`}>
-                <Button className="start-task-btn">🚀 Do This Task</Button>
+          <div className="task-action">
+            {userInfo?.id ? (
+              isOwner ? (
+                <p>You created this task</p>
+              ) : !isDone ? (
+                <Link to={`/task/${taskId}/do`}>
+                  <button className="start-task-btn">Do This Task</button>
+                </Link>
+              ) : (
+                <button className="start-task-btn" disabled>
+                  Already Done
+                </button>
+              )
+            ) : (
+              <Link to={'/login'}>
+                <button className="start-task-btn">
+                  Login to Do This Task
+                </button>
               </Link>
-            </div>
+            )}
+          </div>
+
+          {isDone && (
+            <p className="task-done-message">
+              You’ve already completed this task!
+            </p>
           )}
         </>
       ) : (
-        <p className="loading-text">🔄 Loading task data...</p>
+        <p className="loading-text">❌ Task not found</p>
       )}
     </div>
   );

@@ -7,6 +7,13 @@ const taskSchema = new Schema(
     description: { type: String, require: true },
     deadline: { type: Date, require: true },
     manager: { type: Schema.Types.ObjectId, ref: 'user' },
+    doneBy: [
+      {
+        user: { type: Schema.Types.ObjectId, ref: 'user' },
+        solution: { type: String },
+        completedAt: { type: Date, default: Date.now },
+      },
+    ],
   },
   { timestamps: true }
 );

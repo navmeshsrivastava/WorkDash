@@ -48,6 +48,13 @@ export default function Navbar() {
         <div className="options">
           <div className="home">Home</div>
           <div className="about">About</div>
+          {userInfo && userInfo.role !== 'Employee' ? (
+            <Link to={`task/created/${userInfo.id}`}>
+              <div className="home">📂 My Created Tasks</div>
+            </Link>
+          ) : (
+            <></>
+          )}
         </div>
       </div>
 
