@@ -1,6 +1,5 @@
 import CodeEditor from '../CodeEditor';
 import './DoCodeTaskPage.css';
-import { Button } from '@mui/material';
 import { Link, Navigate, useParams } from 'react-router-dom';
 import { UserContext } from '../UserContext';
 import { useContext, useState } from 'react';
@@ -61,9 +60,9 @@ export default function DoCodeTaskPage({ task }) {
       {userInfo?.id && (
         <div className="task-action">
           <Link to={`#`}>
-            <Button className="submit-task-btn" onClick={handleSubmit}>
-              🚀 Sumbit Task
-            </Button>
+            <button className="submit-task-btn" onClick={handleSubmit}>
+              Sumbit Task
+            </button>
           </Link>
         </div>
       )}

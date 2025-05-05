@@ -1,6 +1,4 @@
 import Tasks from '../Tasks';
-import UploadIcon from '@mui/icons-material/Upload';
-import Button from '@mui/material/Button';
 import { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../UserContext';
 import { Link } from 'react-router-dom';
@@ -21,25 +19,12 @@ export default function IndexPage() {
   return (
     <>
       {userInfo && userInfo.role !== 'Employee' ? (
-        <Link to={'/upload'}>
-          <div style={{ position: 'relative', height: '55px' }}>
-            <Button
-              variant="outlined"
-              startIcon={<UploadIcon />}
-              sx={{
-                position: 'absolute',
-                top: '20px',
-                right: '20px',
-                borderRadius: '25px',
-              }}
-            >
-              Upload task
-            </Button>
+        <Link to="/upload">
+          <div className="create-btn">
+            <button className="create-task-btn">Create Task</button>
           </div>
         </Link>
-      ) : (
-        <></>
-      )}
+      ) : null}
 
       <Tasks tasks={tasks} />
     </>

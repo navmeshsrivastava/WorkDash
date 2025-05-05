@@ -6,7 +6,7 @@ const taskSchema = new Schema(
     title: { type: String, require: true },
     description: { type: String, require: true },
     deadline: { type: Date, require: true },
-    manager: { type: Schema.Types.ObjectId, ref: 'user' },
+    postedBy: { type: Schema.Types.ObjectId, ref: 'user' },
     doneBy: [
       {
         user: { type: Schema.Types.ObjectId, ref: 'user' },

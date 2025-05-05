@@ -1,0 +1,86 @@
+.tasks-visited-container {
+  margin: 20px;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f4f6f9;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.page-title {
+  font-size: 2rem;
+  color: #1e88e5;
+  text-align: center;
+  margin-bottom: 30px;
+  font-weight: 600;
+}
+
+.no-tasks-message {
+  text-align: center;
+  color: #777;
+  font-size: 1.2rem;
+  margin-top: 70px;
+}
+
+.task-card {
+  background: white;
+  border-left: 6px solid #1e88e5;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  border-radius: 10px;
+  transition: transform 0.2s ease;
+}
+
+.task-title {
+  color: #1e88e5;
+  margin-bottom: 0.5rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.task-description,
+.task-deadline {
+  margin: 0.5rem 0;
+  color: #333;
+  font-size: 1rem;
+}
+
+.task-solution {
+  margin-top: 10px;
+  color: #333;
+  font-size: 1rem;
+}
+
+.toggle-link {
+  color: #1e88e5;
+  text-decoration: none;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+pre {
+  background-color: #1e1e1e;
+  color: white;
+  padding: 0.8rem;
+  border-radius: 6px;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  margin-top: 0.3rem;
+}
+
+.task-completed-at {
+  color: #888;
+  margin-top: 10px;
+  font-size: 0.9rem;
+}
+
+.tasks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 900px;
+  margin: 0 auto;
+}

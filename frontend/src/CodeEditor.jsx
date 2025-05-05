@@ -21,15 +21,25 @@ const CodeEditor = ({ onCodeChange }) => {
   };
 
   return (
-    <div style={{ padding: '1rem' }}>
+    <div style={{ padding: '1rem', backgroundColor: '#fdfdfd' }}>
       <div style={{ marginBottom: '10px' }}>
-        <label htmlFor="lang" style={{ marginRight: '10px' }}>
+        <label
+          htmlFor="lang"
+          style={{ marginRight: '10px', fontWeight: 'bold' }}
+        >
           Select Language:
         </label>
         <select
           id="lang"
           value={language}
           onChange={(e) => setLanguage(e.target.value)}
+          style={{
+            padding: '5px 10px',
+            border: '1px solid #1e88e5',
+            borderRadius: '4px',
+            color: '#1e88e5',
+            fontWeight: '500',
+          }}
         >
           <option value="html">HTML</option>
           <option value="javascript">JavaScript</option>
@@ -37,7 +47,19 @@ const CodeEditor = ({ onCodeChange }) => {
           <option value="cpp">C++</option>
           <option value="java">Java</option>
         </select>
-        <button onClick={handleRun} style={{ marginLeft: '15px' }}>
+        <button
+          onClick={handleRun}
+          style={{
+            marginLeft: '15px',
+            backgroundColor: '#1e88e5',
+            color: 'white',
+            padding: '6px 16px',
+            border: 'none',
+            borderRadius: '4px',
+            fontWeight: '500',
+            cursor: 'pointer',
+          }}
+        >
           ▶ Run Code
         </button>
       </div>
@@ -59,7 +81,8 @@ const CodeEditor = ({ onCodeChange }) => {
             marginTop: '20px',
             width: '100%',
             height: '300px',
-            border: '1px solid #ccc',
+            border: '2px solid #1e88e5',
+            borderRadius: '4px',
           }}
         />
       ) : (
@@ -71,6 +94,8 @@ const CodeEditor = ({ onCodeChange }) => {
             padding: '10px',
             height: '300px',
             overflow: 'auto',
+            borderRadius: '4px',
+            border: '2px solid #1e88e5',
           }}
         >
           {output}

@@ -22,7 +22,7 @@ export default function SingleTaskPage() {
       setTask(data);
 
       if (userInfo?.id) {
-        const isManager = data.manager._id === userInfo.id;
+        const isManager = data.postedBy._id === userInfo.id;
         setIsOwner(isManager);
       }
 
@@ -54,25 +54,23 @@ export default function SingleTaskPage() {
             <div className="task-info-section">
               <h3>Task Info</h3>
               <div className="info-box">
-                🗓️ <strong>Deadline:</strong> {formatDate(task.deadline)}
+                <strong>Deadline:</strong> {formatDate(task.deadline)}
               </div>
               <div className="info-box">
-                📋 <strong>Status:</strong> {task.status || 'Not specified'}
+                <strong>Status:</strong> {task.status || 'Not specified'}
               </div>
             </div>
 
             <div className="task-info-section">
               <h3>Posted By</h3>
               <div className="info-box">
-                🙋 <strong>Name:</strong> {task.manager?.name || 'Unknown'}
+                <strong>Name:</strong> {task.postedBy?.name || 'Unknown'}
               </div>
               <div className="info-box">
-                🎯 <strong>Role:</strong>{' '}
-                {task.manager?.role || 'Not specified'}
+                <strong>Role:</strong> {task.postedBy?.role || 'Not specified'}
               </div>
               <div className="info-box">
-                📧 <strong>Email:</strong>{' '}
-                {task.manager?.email || 'Not provided'}
+                <strong>Email:</strong> {task.postedBy?.email || 'Not provided'}
               </div>
             </div>
           </div>

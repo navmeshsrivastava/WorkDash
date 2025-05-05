@@ -110,7 +110,7 @@ app.post('/task', (req, res) => {
       title,
       description,
       deadline,
-      manager: info.id,
+      postedBy: info.id,
     });
 
     const user = await User.findById(info.id);
@@ -125,7 +125,7 @@ app.get('/task', async (req, res) => {
   try {
     const tasks = await Task.find()
       .sort({ createdAt: -1 })
-      .populate('manager', 'name role email _id');
+      .populate('postedBy', 'name role email _id');
     res.status(200).json(tasks);
   } catch (error) {
     console.error('Failed to fetch tasks:', error);
@@ -142,7 +142,7 @@ app.get('/task/:taskId', async (req, res) => {
 
   try {
     const task = await Task.findById(taskId).populate(
-      'manager',
+      'postedBy',
       'name role email _id'
     );
     if (!task) return res.status(404).json({ error: 'Task not found' });
@@ -154,40 +154,36 @@ app.get('/task/:taskId', async (req, res) => {
 });
 
 app.post('/task/:taskId', async (req, res) => {
+  const { taskId } = req.params;
+  const { userId, solution } = req.body;
+
+  if (!userId || !solution) {
+    return res.status(400).json({ error: 'userId and solution are required' });
+  }
+
   try {
-    const { taskId } = req.params;
-    const { userId, solution } = req.body;
-
-    if (!userId || !solution) {
-      return res
-        .status(400)
-        .json({ error: 'userId and solution are required' });
-    }
-
     const task = await Task.findById(taskId);
-    if (!task) {
-      return res.status(404).json({ error: 'Task not found' });
-    }
-
-    if (task.manager.toString() === userId) {
+    if (!task) return res.status(404).json({ error: 'Task not found' });
+    if (task.postedBy.toString() === userId)
       return res
         .status(400)
         .json({ error: 'Task owner cannot do their own task' });
-    }
 
     const alreadyDone = task.doneBy.some(
       (entry) => entry.user.toString() === userId
     );
-    if (alreadyDone) {
+    if (alreadyDone)
       return res
         .status(400)
         .json({ error: 'Task already submitted by this user' });
-    }
 
-    task.doneBy.push({ user: userId, solution });
+    task.doneBy.push({ user: userId, solution, completedAt: new Date() });
     await task.save();
+    await User.findByIdAndUpdate(userId, { $push: { tasksDone: taskId } });
 
-    res.status(200).json(task.doneBy);
+    res
+      .status(200)
+      .json({ message: 'Task submitted successfully', doneBy: task.doneBy });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Server error' });
@@ -201,13 +197,41 @@ app.get('/task/created/:userId', async (req, res) => {
     const user = await User.findById(userId).populate({
       path: 'tasksPosted',
       populate: {
-        path: 'doneBy.user', // path to populate inside doneBy array
-        model: 'user', // assuming the model name is User
-        select: 'name email', // optional: pick fields you want
+        path: 'doneBy.user',
+        model: 'user',
+        select: 'name email',
       },
     });
 
     res.json({ tasksPosted: user.tasksPosted });
+  } catch (error) {
+    console.error('Error fetching tasks:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+app.get('/task/visited/:userId', async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const user = await User.findById(userId).populate('tasksDone');
+
+    const tasksVisited = user.tasksDone.map((task) => {
+      const doneByUser = task.doneBy.find(
+        (done) => done.user.toString() === userId
+      );
+
+      if (doneByUser) {
+        return {
+          ...task.toObject(),
+          doneBy: doneByUser,
+        };
+      }
+
+      return task;
+    });
+
+    res.status(200).json({ tasksVisited });
   } catch (error) {
     console.error('Error fetching tasks:', error);
     res.status(500).json({ message: 'Server error' });

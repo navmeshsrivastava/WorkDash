@@ -10,6 +10,7 @@ import UploadTaskPage from './pages/UploadTaskPage';
 import SingleTaskPage from './pages/SingleTaskPage';
 import HandleTaskPage from './HandleTask';
 import TasksCreatedPage from './pages/TasksCreatedPage';
+import TasksVistedPage from './pages/TasksVisitedPage';
 
 function App() {
   return (
@@ -26,6 +27,10 @@ function App() {
           <Route
             path={'/task/created/:userId'}
             element={<TasksCreatedPage />}
+          ></Route>
+          <Route
+            path={'/task/visited/:userId'}
+            element={<TasksVistedPage />}
           ></Route>
         </Route>
       </Routes>

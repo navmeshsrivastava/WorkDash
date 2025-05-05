@@ -1,10 +1,10 @@
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { Button } from '@mui/material';
 import { formatDate } from './helper';
 import { Link } from 'react-router-dom';
+import './Task.css';
 
 export default function Task({ task }) {
-  const { _id: taskId, title, description, deadline, manager } = task;
+  const { _id: taskId, title, description, deadline, postedBy } = task;
   return (
     <div className="tasks">
       <div className="tasks-info">
@@ -19,14 +19,14 @@ export default function Task({ task }) {
           <AccountCircleIcon />
         </div>
         <div>
-          <p>{manager.name}</p>
-          <p>{manager.role}</p>
+          <p>{postedBy.name}</p>
+          <p>{postedBy.role}</p>
         </div>
       </div>
       <div className="tasks-tools">
         <div className="attachments">3 attachements</div>
         <Link to={`task/${taskId}`}>
-          <Button className="view-task-btn">View Details</Button>
+          <button className="view-task-btn">View Details</button>
         </Link>
       </div>
     </div>

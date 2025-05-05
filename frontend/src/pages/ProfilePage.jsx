@@ -1,4 +1,3 @@
-import Button from '@mui/material/Button';
 import { UserContext } from '../UserContext';
 import { useContext, useState } from 'react';
 import { Navigate } from 'react-router-dom';
@@ -22,14 +21,14 @@ export default function ProfilePage() {
   return (
     <>
       <div className="profile-page">
-        <Button
+        <button
           className="logout-btn"
           variant="contained"
           color="error"
           onClick={logout}
         >
           Logout
-        </Button>
+        </button>
       </div>
     </>
   );

@@ -1,11 +1,14 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AddTaskIcon from '@mui/icons-material/AddTask';
+import MenuIcon from '@mui/icons-material/Menu';
+import CloseIcon from '@mui/icons-material/Close';
 import { UserContext } from './UserContext';
+import './Navbar.css';
 
 export default function Navbar() {
   const { userInfo, setUserInfo } = useContext(UserContext);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -33,49 +36,52 @@ export default function Navbar() {
   }, []);
 
   return (
-    <div className="navbar">
+    <nav className="navbar">
       <div className="left">
-        <Link to="/">
-          <div className="app">
-            <div className="app-icon">
-              <AddTaskIcon />
-            </div>
-            <div className="app-name">
-              <i>WorkDash</i>
-            </div>
-          </div>
+        <Link to="/" className="logo">
+          <AddTaskIcon />
+          <span>WorkDash</span>
         </Link>
-        <div className="options">
-          <div className="home">Home</div>
-          <div className="about">About</div>
-          {userInfo && userInfo.role !== 'Employee' ? (
-            <Link to={`task/created/${userInfo.id}`}>
-              <div className="home">📂 My Created Tasks</div>
-            </Link>
-          ) : (
-            <></>
-          )}
-        </div>
+      </div>
+
+      <div className={`center ${menuOpen ? 'open' : ''}`}>
+        <Link to="/" className="nav-link">
+          Home
+        </Link>
+        <Link to="/" className="nav-link">
+          About
+        </Link>
+        {userInfo && userInfo?.role !== 'Employee' && (
+          <Link to={`/task/created/${userInfo.id}`} className="nav-link">
+            My Created Tasks
+          </Link>
+        )}
+        {userInfo && userInfo?.role === 'Employee' && (
+          <Link to={`/task/visited/${userInfo.id}`} className="nav-link">
+            See Tasks
+          </Link>
+        )}
       </div>
 
       <div className="right">
-        {userInfo && userInfo.id ? (
-          <Link to="/profile">
-            <div className="profile">
-              <AccountCircleIcon fontSize="large" />
-            </div>
+        {userInfo && userInfo?.id ? (
+          <Link to="/profile" className="profile-icon">
+            Profile
           </Link>
         ) : (
           <>
-            <Link to="/login">
-              <div className="login-route">Login</div>
+            <Link to="/login" className="nav-link">
+              Login
             </Link>
-            <Link to="/register">
-              <div className="register">Register</div>
+            <Link to="/register" className="nav-link">
+              Register
             </Link>
           </>
         )}
+        <div className="menu-icon" onClick={() => setMenuOpen(!menuOpen)}>
+          {menuOpen ? <CloseIcon /> : <MenuIcon />}
+        </div>
       </div>
-    </div>
+    </nav>
   );
 }

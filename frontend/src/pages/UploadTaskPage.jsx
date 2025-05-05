@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Navigate } from 'react-router-dom';
+import './UploadTaskPage.css';
 
 export default function UploadTask() {
   const [title, setTitle] = useState('');
