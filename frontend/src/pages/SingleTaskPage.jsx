@@ -48,6 +48,33 @@ export default function SingleTaskPage() {
           <div className="task-description-card">
             <h2>Description</h2>
             <p>{task.description || 'No description provided'}</p>
+            Attachments:
+            <div className="attachments att">
+              {task.attachments.length > 0 ? (
+                task.attachments.map((attachment, index) => {
+                  const isPDF = attachment.toLowerCase().endsWith('.pdf');
+                  return isPDF ? (
+                    <p
+                      key={index}
+                      className="attachment-pdf see-more-link"
+                      onClick={() => window.open(attachment, '_blank')}
+                    >
+                      see pdf
+                    </p>
+                  ) : (
+                    <img
+                      key={index}
+                      src={attachment}
+                      alt="attachment"
+                      className="attachment-img"
+                      onClick={() => window.open(attachment, '_blank')}
+                    />
+                  );
+                })
+              ) : (
+                <p>No attachments attached</p>
+              )}
+            </div>
           </div>
 
           <div className="task-info-wrapper">
@@ -78,7 +105,7 @@ export default function SingleTaskPage() {
           <div className="task-action">
             {userInfo?.id ? (
               isOwner ? (
-                <p>You created this task</p>
+                <p className="owner-msg">You created this task</p>
               ) : !isDone ? (
                 <Link to={`/task/${taskId}/do`}>
                   <button className="start-task-btn">Do This Task</button>

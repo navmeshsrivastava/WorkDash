@@ -3,9 +3,10 @@ const { Schema, model } = mongoose;
 
 const taskSchema = new Schema(
   {
-    title: { type: String, require: true },
-    description: { type: String, require: true },
-    deadline: { type: Date, require: true },
+    title: { type: String, required: true },
+    description: { type: String, required: true },
+    deadline: { type: Date, required: true },
+    attachments: [{ type: String }],
     postedBy: { type: Schema.Types.ObjectId, ref: 'user' },
     doneBy: [
       {

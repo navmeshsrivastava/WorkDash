@@ -101,3 +101,24 @@
     text-align: center;
   }
 }
+
+.attachment-img {
+  width: 100px;
+  height: 70px;
+  object-fit: cover;
+  margin: 5px;
+  object-position: center;
+  cursor: pointer;
+}
+
+.see-more-link {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: bold;
+  margin-left: 4px;
+  cursor: pointer;
+}
+
+.see-more-link:hover {
+  text-decoration: underline;
+}

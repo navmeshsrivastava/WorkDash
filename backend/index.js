@@ -11,6 +11,10 @@ const User = require('./models/userModel');
 const Task = require('./models/taskModel');
 const salt = bcrypt.genSaltSync(10);
 
+const multer = require('multer');
+const { storage } = require('./utils/cloudinary');
+const upload = multer({ storage });
+
 app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
@@ -88,21 +92,22 @@ app.post('/login', async (req, res) => {
   }
 });
 
-app.post('/task', (req, res) => {
+app.post('/task', upload.array('attachments', 3), (req, res) => {
   const { token } = req.cookies;
 
   if (!token) {
-    return res.status(401).json({ error: 'No token provided' });
+    return res.status(401).json({ error: 'No token provided here' });
   }
 
   const { title, description, deadline } = req.body;
+  const attachmentUrls = req.files.map((file) => file.path);
 
   if (!title || !description || !deadline) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
   jwt.verify(token, process.env.JWT_SECRET, {}, async (err, info) => {
-    if (err) {
+    if (err || info.role === 'employee') {
       return res.status(401).json({ error: 'Unauthorized' });
     }
 
@@ -110,6 +115,7 @@ app.post('/task', (req, res) => {
       title,
       description,
       deadline,
+      attachments: attachmentUrls,
       postedBy: info.id,
     });
 

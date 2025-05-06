@@ -62,6 +62,7 @@
 .task-action {
   text-align: center;
   margin-top: 30px;
+  padding-bottom: 1rem;
 }
 
 .start-task-btn {
@@ -76,7 +77,7 @@
   text-transform: none;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   transition: background-color 0.3s ease, transform 0.2s ease;
-  margin-bottom: 25px;
+  margin-bottom: 15px;
 }
 
 .start-task-btn:hover {
@@ -101,6 +102,7 @@
   text-align: center;
   color: green;
   font-size: 1.1rem;
+  padding-bottom: 20px;
 }
 
 @media (max-width: 768px) {
@@ -111,4 +113,9 @@
   .task-info-section {
     flex: 1 1 100%;
   }
+}
+
+.owner-message {
+  margin-bottom: 2rem;
+  display: block;
 }

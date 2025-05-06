@@ -11,6 +11,7 @@ import SingleTaskPage from './pages/SingleTaskPage';
 import HandleTaskPage from './HandleTask';
 import TasksCreatedPage from './pages/TasksCreatedPage';
 import TasksVistedPage from './pages/TasksVisitedPage';
+import RoleProtectedRoute from './RoleProtectedRoute';
 
 function App() {
   return (
@@ -21,12 +22,23 @@ function App() {
           <Route path={'/register'} element={<RegisterPage />}></Route>
           <Route path={'/profile'} element={<ProfilePage />}></Route>
           <Route path={'/login'} element={<LoginPage />}></Route>
-          <Route path={'/upload'} element={<UploadTaskPage />}></Route>
+          <Route
+            path={'/upload'}
+            element={
+              <RoleProtectedRoute>
+                <UploadTaskPage />
+              </RoleProtectedRoute>
+            }
+          ></Route>
           <Route path={'/task/:taskId'} element={<SingleTaskPage />}></Route>
           <Route path={'/task/:taskId/do'} element={<HandleTaskPage />}></Route>
           <Route
             path={'/task/created/:userId'}
-            element={<TasksCreatedPage />}
+            element={
+              <RoleProtectedRoute>
+                <TasksCreatedPage />
+              </RoleProtectedRoute>
+            }
           ></Route>
           <Route
             path={'/task/visited/:userId'}
