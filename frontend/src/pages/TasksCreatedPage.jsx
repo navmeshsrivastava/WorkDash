@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import './TasksCreatedPage.css';
 
 export default function TasksCreatedPage() {
@@ -19,8 +19,6 @@ export default function TasksCreatedPage() {
           }
         );
         const data = await response.json();
-        console.log('1', data);
-        console.log('2', data.tasksPosted);
         setTasks(data.tasksPosted);
       } catch (error) {
         console.error('Failed to load tasks:', error);
@@ -43,6 +41,28 @@ export default function TasksCreatedPage() {
     }));
   };
 
+  const handleDelete = async (taskId) => {
+    try {
+      const response = await fetch(`http://localhost:4000/task/${taskId}`, {
+        method: 'DELETE',
+        credentials: 'include',
+      });
+
+      if (response.ok) {
+        alert('Task deleted successfully');
+        setTasks((prevTasks) =>
+          prevTasks.filter((task) => task._id !== taskId)
+        );
+      } else {
+        const data = await response.json();
+        alert(`Failed to delete task: ${data.error || 'Unknown error'}`);
+      }
+    } catch (error) {
+      alert('Something went wrong while deleting the task');
+      console.error(error);
+    }
+  };
+
   return (
     <div className="tasks-created-page">
       <h1 className="page-heading"> Tasks You've Created</h1>
@@ -53,19 +73,71 @@ export default function TasksCreatedPage() {
         tasks.map((task) => (
           <div className="task-card" key={task._id}>
             <h2 className="task-title"> {task.title}</h2>
-            <p className="task-description">{task.description}</p>
+            <p className="description">
+              {task.description.length > 150 ? (
+                <>
+                  {task.description.slice(0, 150)}...
+                  <Link to={`/task/${task._id}`} className="see-more-link">
+                    {' '}
+                    see more
+                  </Link>
+                </>
+              ) : (
+                task.description
+              )}
+            </p>
             <p className="task-deadline">
               <b>Deadline:</b> {new Date(task.deadline).toLocaleDateString()}
             </p>
+            <b>Attachments:</b>
+            <div className="attachments att">
+              {task.attachments.length > 0 ? (
+                task.attachments.map((attachment, index) => {
+                  const isPDF = attachment.toLowerCase().endsWith('.pdf');
+                  return isPDF ? (
+                    <p
+                      key={index}
+                      className="attachment-pdf see-more-link"
+                      onClick={() => window.open(attachment, '_blank')}
+                    >
+                      see pdf
+                    </p>
+                  ) : (
+                    <img
+                      key={index}
+                      src={attachment}
+                      alt="attachment"
+                      className="attachment-img"
+                      onClick={() => window.open(attachment, '_blank')}
+                    />
+                  );
+                })
+              ) : (
+                <p>No attachments attached</p>
+              )}
+            </div>
 
-            <button
-              className="toggle-submissions-btn"
-              onClick={() => toggleSubmissions(task._id)}
-            >
-              {openSubmissions[task._id]
-                ? ' Hide Submissions'
-                : ' View Submissions'}
-            </button>
+            <div className="btns">
+              <button
+                className="toggle-submissions-btn"
+                onClick={() => toggleSubmissions(task._id)}
+              >
+                {openSubmissions[task._id]
+                  ? ' Hide Submissions'
+                  : ' View Submissions'}
+              </button>
+              <div className="edit-delete-btns">
+                <button className="edit-submissions-btn">Edit Task</button>
+                <button
+                  className="delete-submissions-btn"
+                  onClick={() => {
+                    handleDelete(task._id);
+                  }}
+                >
+                  Delete Task
+                </button>
+              </div>
+            </div>
 
             {openSubmissions[task._id] && (
               <div className="submissions-section">

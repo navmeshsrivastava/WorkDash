@@ -1,11 +1,13 @@
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useContext, useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
 import './TasksVisitedPage.css';
+import { UserContext } from '../UserContext';
+import HandleTaskPage from '../HandleTask';
 
 export default function TasksVisitedPage() {
   const { userId } = useParams();
   const [tasksVisited, setTasksVisited] = useState([]);
-
+  const { userInfo } = useContext(UserContext);
   const [visibleSolution, setVisibleSolution] = useState({});
 
   useEffect(() => {
@@ -31,12 +33,52 @@ export default function TasksVisitedPage() {
     }));
   };
 
+  const editsubmission = async (task) => {
+    if (task.doneBy.user !== userInfo.id) {
+      return alert('Unauthorized action performed');
+    }
+    <HandleTaskPage task={task} />;
+
+    const response = await fetch(`http://localhost:4000/task/${task._id}`, {
+      credentials: 'include',
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ solution: 'Updated solution URL here' }),
+    });
+
+    if (response.ok) {
+      alert('Submission updated');
+    } else {
+      alert('Failed to update');
+    }
+  };
+
+  const undoSubmission = async (taskId) => {
+    const response = await fetch(`http://localhost:4000/task/undo/${taskId}`, {
+      credentials: 'include',
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ userId: userInfo.id }),
+    });
+
+    if (response.ok) {
+      alert('Task Undo Completed');
+      setTasksVisited((prevTasks) =>
+        prevTasks.filter((task) => task._id !== taskId)
+      );
+    }
+  };
+
   return (
     <div className="tasks-visited-container">
       <h1 className="page-title">Tasks Visited</h1>
       <div className="tasks-list">
         {tasksVisited.length === 0 ? (
-          <p className="no-tasks-message">No tasks visited by this user.</p>
+          <p className="no-tasks-message">You haven't visited any tasks yet.</p>
         ) : (
           tasksVisited.map((task) => (
             <div className="task-card" key={task._id}>
@@ -65,6 +107,19 @@ export default function TasksVisitedPage() {
                 <strong>Completed At:</strong>{' '}
                 {new Date(task.doneBy?.completedAt).toLocaleString()}
               </p>
+              <div className="btns">
+                <button
+                  className="undo-submission-btn"
+                  onClick={() => {
+                    undoSubmission(task._id);
+                  }}
+                >
+                  Undo Submission
+                </button>
+                <Link to={`/task/${task._id}/do`}>
+                  <button className="undo-submission-btn">Edit solution</button>
+                </Link>
+              </div>
             </div>
           ))
         )}

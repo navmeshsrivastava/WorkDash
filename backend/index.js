@@ -20,8 +20,12 @@ app.use(express.json());
 app.use(cookieParser());
 
 mongoose
-  .connect(process.env.MONGO_URL)
-  .then((res) => console.log('connected to db'));
+  .connect(process.env.MONGO_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log('Connected to DB'))
+  .catch((err) => console.error('Failed to connect to DB:', err));
 
 app.post('/register', async (req, res) => {
   const { name, username, role, email, password } = req.body;
@@ -196,12 +200,77 @@ app.post('/task/:taskId', async (req, res) => {
   }
 });
 
+app.put('/task/:taskId', async (req, res) => {
+  res.send('action performed');
+});
+
+app.delete('/task/undo/:taskId', async (req, res) => {
+  try {
+    const { taskId } = req.params;
+    const { userId } = req.body;
+
+    if (!userId) {
+      return res.status(400).json({ error: 'userId is required in the body' });
+    }
+
+    await Task.findByIdAndUpdate(taskId, {
+      $pull: { doneBy: { user: userId } },
+    });
+    await User.findByIdAndUpdate(userId, { $pull: { tasksDone: taskId } });
+
+    res.status(200).json({ success: 'Task Undo Completed' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+app.delete('/task/:taskId', async (req, res) => {
+  try {
+    const { taskId } = req.params;
+    const task = await Task.findById(taskId);
+
+    if (!task) {
+      return res.status(404).json({ error: 'No such task exists' });
+    }
+
+    const { token } = req.cookies;
+
+    if (!token) {
+      return res.status(401).json({ error: 'No token provided here' });
+    }
+
+    jwt.verify(token, process.env.JWT_SECRET, {}, async (err, info) => {
+      if (err || info.id !== task.postedBy.toString()) {
+        return res.status(401).json({ error: 'Unauthorized' });
+      }
+      let userId = task.postedBy;
+      await User.findByIdAndUpdate(userId, { $pull: { tasksPosted: taskId } });
+      await Promise.all(
+        task.doneBy.map((doneBy) => {
+          let userId = doneBy.user;
+          return User.findByIdAndUpdate(userId, {
+            $pull: { tasksDone: taskId },
+          });
+        })
+      );
+
+      await Task.findByIdAndDelete(taskId);
+      res.status(200).json({ success: 'Task deleted successfully' });
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 app.get('/task/created/:userId', async (req, res) => {
   try {
     const { userId } = req.params;
 
     const user = await User.findById(userId).populate({
       path: 'tasksPosted',
+      options: { sort: { createdAt: -1 } },
       populate: {
         path: 'doneBy.user',
         model: 'user',
@@ -236,7 +305,6 @@ app.get('/task/visited/:userId', async (req, res) => {
 
       return task;
     });
-
     res.status(200).json({ tasksVisited });
   } catch (error) {
     console.error('Error fetching tasks:', error);
