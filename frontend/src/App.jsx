@@ -12,6 +12,7 @@ import HandleTaskPage from './HandleTask';
 import TasksCreatedPage from './pages/TasksCreatedPage';
 import TasksVistedPage from './pages/TasksVisitedPage';
 import RoleProtectedRoute from './RoleProtectedRoute';
+import HandleTaskEdit from './HandleTaskEdit';
 
 function App() {
   return (
@@ -32,6 +33,11 @@ function App() {
           ></Route>
           <Route path={'/task/:taskId'} element={<SingleTaskPage />}></Route>
           <Route path={'/task/:taskId/do'} element={<HandleTaskPage />}></Route>
+          <Route
+            path={'/task/:taskId/edit'}
+            element={<HandleTaskEdit />}
+          ></Route>
+
           <Route
             path={'/task/created/:userId'}
             element={

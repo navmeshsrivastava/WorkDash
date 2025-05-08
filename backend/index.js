@@ -163,6 +163,36 @@ app.get('/task/:taskId', async (req, res) => {
   }
 });
 
+app.get('/task/:taskId/edit', async (req, res) => {
+  try {
+    const taskId = req.params.taskId;
+    const userId = req.query.userId;
+
+    const task = await Task.findById(taskId);
+
+    if (!task) {
+      return res.status(404).json({ error: 'Task not found' });
+    }
+
+    const doneByUser = task.doneBy.find(
+      (done) => done.user.toString() === userId
+    );
+
+    if (!doneByUser) {
+      return res.status(401).json({ failed: "You haven't completed the task" });
+    }
+
+    const taskObj = task.toObject();
+
+    taskObj.doneBy = doneByUser;
+
+    return res.status(200).json(taskObj);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 app.post('/task/:taskId', async (req, res) => {
   const { taskId } = req.params;
   const { userId, solution } = req.body;
@@ -201,7 +231,32 @@ app.post('/task/:taskId', async (req, res) => {
 });
 
 app.put('/task/:taskId', async (req, res) => {
-  res.send('action performed');
+  try {
+    const { taskId } = req.params;
+    const { solution, userId } = req.body;
+
+    const task = await Task.findById(taskId);
+    if (!task) {
+      return res.status(404).json({ error: 'Task not found' });
+    }
+
+    const doneEntry = task.doneBy.find(
+      (entry) => entry.user.toString() === userId
+    );
+
+    if (!doneEntry) {
+      return res.status(404).json({ error: "User hasn't completed the task" });
+    }
+
+    doneEntry.solution = solution;
+
+    await task.save();
+
+    res.json({ success: true, updatedEntry: doneEntry });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
 });
 
 app.delete('/task/undo/:taskId', async (req, res) => {

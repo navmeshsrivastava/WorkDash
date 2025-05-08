@@ -1,9 +1,9 @@
 import React, { useState, useRef } from 'react';
 import Editor from '@monaco-editor/react';
 
-const CodeEditor = ({ onCodeChange }) => {
+const CodeEditor = ({ solution, onCodeChange }) => {
   const [language, setLanguage] = useState('html');
-  const [code, setCode] = useState('<!-- Write code here -->');
+  const [code, setCode] = useState(solution);
   const [output, setOutput] = useState('');
   const iframeRef = useRef(null);
 

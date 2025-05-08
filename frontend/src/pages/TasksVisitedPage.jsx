@@ -33,28 +33,6 @@ export default function TasksVisitedPage() {
     }));
   };
 
-  const editsubmission = async (task) => {
-    if (task.doneBy.user !== userInfo.id) {
-      return alert('Unauthorized action performed');
-    }
-    <HandleTaskPage task={task} />;
-
-    const response = await fetch(`http://localhost:4000/task/${task._id}`, {
-      credentials: 'include',
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ solution: 'Updated solution URL here' }),
-    });
-
-    if (response.ok) {
-      alert('Submission updated');
-    } else {
-      alert('Failed to update');
-    }
-  };
-
   const undoSubmission = async (taskId) => {
     const response = await fetch(`http://localhost:4000/task/undo/${taskId}`, {
       credentials: 'include',
@@ -116,7 +94,7 @@ export default function TasksVisitedPage() {
                 >
                   Undo Submission
                 </button>
-                <Link to={`/task/${task._id}/do`}>
+                <Link to={`/task/${task._id}/edit`}>
                   <button className="undo-submission-btn">Edit solution</button>
                 </Link>
               </div>

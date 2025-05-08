@@ -127,7 +127,6 @@ export default function TasksCreatedPage() {
                   : ' View Submissions'}
               </button>
               <div className="edit-delete-btns">
-                <button className="edit-submissions-btn">Edit Task</button>
                 <button
                   className="delete-submissions-btn"
                   onClick={() => {
