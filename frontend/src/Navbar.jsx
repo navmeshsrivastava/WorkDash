@@ -13,7 +13,7 @@ export default function Navbar() {
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
-        const response = await fetch('http://localhost:4000/load', {
+        const response = await fetch('http://localhost:4000/auth/load', {
           method: 'GET',
           credentials: 'include',
         });
