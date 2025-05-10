@@ -1,6 +1,6 @@
 .task-page-container {
   max-width: 1000px;
-  margin: 20px;
+  margin: 20px auto;
   font-family: 'Segoe UI', sans-serif;
   color: #333;
 }

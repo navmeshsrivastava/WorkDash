@@ -1,9 +1,10 @@
 .tasks-visited-container {
-  margin: 20px;
   font-family: 'Segoe UI', sans-serif;
   background-color: #f4f6f9;
   padding: 20px;
   border-radius: 8px;
+  max-width: 880px;
+  margin: 20px auto;
 }
 
 .page-title {

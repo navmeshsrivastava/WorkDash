@@ -1,9 +1,10 @@
-import { UserContext } from '../UserContext';
 import { useContext, useState } from 'react';
+import './ProfilePage.css';
+import { UserContext } from '../UserContext';
 import { Navigate } from 'react-router-dom';
 
 export default function ProfilePage() {
-  const { setUserInfo } = useContext(UserContext);
+  const { userInfo, setUserInfo } = useContext(UserContext);
   const [redirect, setRedirect] = useState(false);
 
   async function logout() {
@@ -18,18 +19,30 @@ export default function ProfilePage() {
   if (redirect) {
     return <Navigate to={'/'} />;
   }
+
   return (
-    <>
-      <div className="profile-page">
-        <button
-          className="logout-btn"
-          variant="contained"
-          color="error"
-          onClick={logout}
-        >
-          Logout
-        </button>
+    <div className="profile-page">
+      <h2 className="profile-title">Your Profile</h2>
+      <div className="user-info">
+        <div>
+          <b>ID:</b> <i>{userInfo.id}</i>
+        </div>
+        <div>
+          <b>Name:</b> <i>{userInfo.name}</i>
+        </div>
+        <div>
+          <b>Username:</b> <i>@{userInfo.username}</i>
+        </div>
+        <div>
+          <b>Email:</b> <i>{userInfo.email}</i>
+        </div>
+        <div>
+          <b>Role:</b> <i>{userInfo.role}</i>
+        </div>
       </div>
-    </>
+      <button className="logout-btn" onClick={logout}>
+        Logout
+      </button>
+    </div>
   );
 }

@@ -48,7 +48,7 @@ export default function Navbar() {
         <Link to="/" className="nav-link">
           Home
         </Link>
-        <Link to="/" className="nav-link">
+        <Link to="/about" className="nav-link">
           About
         </Link>
         {userInfo && userInfo?.role !== 'Employee' && (

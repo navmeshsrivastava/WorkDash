@@ -13,6 +13,8 @@ import TasksCreatedPage from './pages/TasksCreatedPage';
 import TasksVistedPage from './pages/TasksVisitedPage';
 import RoleProtectedRoute from './RoleProtectedRoute';
 import HandleTaskEdit from './HandleTaskEdit';
+import NotFound from './NotFound';
+import AboutPage from './pages/AboutPage';
 
 function App() {
   return (
@@ -23,6 +25,7 @@ function App() {
           <Route path={'/register'} element={<RegisterPage />}></Route>
           <Route path={'/profile'} element={<ProfilePage />}></Route>
           <Route path={'/login'} element={<LoginPage />}></Route>
+          <Route path={'/about'} element={<AboutPage />}></Route>
           <Route
             path={'/upload'}
             element={
@@ -51,6 +54,7 @@ function App() {
             element={<TasksVistedPage />}
           ></Route>
         </Route>
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </UserContextProvider>
   );

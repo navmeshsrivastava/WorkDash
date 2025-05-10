@@ -1,6 +1,12 @@
-main {
-  max-width: 880px;
-  margin: 0 auto;
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+.container {
+  max-width: 100%;
+  margin: 0 25px;
 }
 
 a {
@@ -33,4 +39,22 @@ a:hover {
 .create-task-btn:hover {
   background-color: #45a049;
   border-radius: 24px;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+.layout-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.content-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
