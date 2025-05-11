@@ -8,7 +8,18 @@ const cookieParser = require('cookie-parser');
 const authRoutes = require('./routes/authRoutes');
 const taskRoutes = require('./routes/taskRoutes');
 
-app.use(cors({ origin: true, credentials: true }));
+const allowedOrigins = [
+  'http://localhost:3000',
+  'https://workdash-project.onrender.com',
+];
+
+app.use(
+  cors({
+    origin: allowedOrigins,
+    credentials: true,
+  })
+);
+
 app.use(express.json());
 app.use(cookieParser());
 
@@ -23,4 +34,6 @@ mongoose
 app.use('/auth', authRoutes);
 app.use('/task', taskRoutes);
 
-app.listen(4000);
+app.listen(4000, () => {
+  console.log('Server running on port 4000');
+});
