@@ -3,20 +3,12 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const mongoose = require('mongoose');
-const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
-
-const User = require('./models/userModel');
-const Task = require('./models/taskModel');
-
-const multer = require('multer');
-const { storage } = require('./utils/cloudinary');
-const upload = multer({ storage });
 
 const authRoutes = require('./routes/authRoutes');
 const taskRoutes = require('./routes/taskRoutes');
 
-app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
+app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
 
