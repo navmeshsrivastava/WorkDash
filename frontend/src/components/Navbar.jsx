@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import AddTaskIcon from '@mui/icons-material/AddTask';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
-import { UserContext } from './UserContext';
+import { UserContext } from '../UserContext';
 import './Navbar.css';
 import { API_URL } from '../utils/api';
 

@@ -1,8 +1,8 @@
-import Tasks from '../Tasks';
 import { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../UserContext';
 import { Link } from 'react-router-dom';
 import { API_URL } from '../utils/api';
+import Tasks from '../components/Tasks';
 
 export default function IndexPage() {
   const { userInfo } = useContext(UserContext);

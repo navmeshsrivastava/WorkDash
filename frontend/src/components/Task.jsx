@@ -1,6 +1,6 @@
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { formatDate } from './helper';
-import { Link, Navigate } from 'react-router-dom';
+import { formatDate } from '../helper';
+import { Link } from 'react-router-dom';
 import './Task.css';
 
 export default function Task({ task }) {

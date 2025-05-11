@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import Editor from '@monaco-editor/react';
 
 const CodeEditor = ({ solution, onCodeChange }) => {
