@@ -1,6 +1,7 @@
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import DoCodeTaskPage from './pages/DoCodeTaskPage';
 import { useEffect, useState } from 'react';
+import { API_URL } from '../utils/api';
 
 export default function HandleTaskPage() {
   const [task, setTask] = useState(null);
@@ -9,7 +10,7 @@ export default function HandleTaskPage() {
   useEffect(() => {
     const loadTask = async () => {
       console.log(taskId);
-      const response = await fetch(`http://localhost:4000/task/${taskId}`, {
+      const response = await fetch(`${API_URL}/task/${taskId}`, {
         method: 'GET',
         credentials: 'include',
       });

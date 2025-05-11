@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import './TasksCreatedPage.css';
+import { API_URL } from '../utils/api';
 
 export default function TasksCreatedPage() {
   const { userId } = useParams();
@@ -11,13 +12,10 @@ export default function TasksCreatedPage() {
   useEffect(() => {
     const loadTasksCreated = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:4000/task/created/${userId}`,
-          {
-            method: 'GET',
-            credentials: 'include',
-          }
-        );
+        const response = await fetch(`${API_URL}/task/created/${userId}`, {
+          method: 'GET',
+          credentials: 'include',
+        });
         const data = await response.json();
         setTasks(data.tasksPosted);
       } catch (error) {
@@ -43,7 +41,7 @@ export default function TasksCreatedPage() {
 
   const handleDelete = async (taskId) => {
     try {
-      const response = await fetch(`http://localhost:4000/task/${taskId}`, {
+      const response = await fetch(`${API_URL}/task/${taskId}`, {
         method: 'DELETE',
         credentials: 'include',
       });

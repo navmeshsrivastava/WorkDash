@@ -2,6 +2,7 @@ import { useEffect, useState, useContext } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
 import { UserContext } from './UserContext';
 import EditCodeTask from './pages/EditCodeTask';
+import { API_URL } from '../utils/api';
 
 export default function HandleTaskEdit() {
   const { taskId } = useParams();
@@ -13,7 +14,7 @@ export default function HandleTaskEdit() {
     const loadTask = async () => {
       try {
         const res = await fetch(
-          `http://localhost:4000/task/${taskId}/edit?userId=${userInfo.id}`,
+          `${API_URL}/task/${taskId}/edit?userId=${userInfo.id}`,
           {
             method: 'GET',
             credentials: 'include',

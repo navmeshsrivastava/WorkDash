@@ -3,6 +3,7 @@ import './DoCodeTaskPage.css';
 import { Link, Navigate, useParams } from 'react-router-dom';
 import { UserContext } from '../UserContext';
 import { useContext, useState } from 'react';
+import { API_URL } from '../utils/api';
 
 export default function DoCodeTaskPage({ task }) {
   const [code, setCode] = useState('');
@@ -15,7 +16,7 @@ export default function DoCodeTaskPage({ task }) {
   };
 
   const handleSubmit = async () => {
-    const response = await fetch(`http://localhost:4000/task/${taskId}`, {
+    const response = await fetch(`${API_URL}/task/${taskId}`, {
       method: 'POST',
       credentials: 'include',
       headers: {

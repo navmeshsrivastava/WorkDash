@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import './UploadTaskPage.css';
+import { API_URL } from '../utils/api';
 
 export default function UploadTask() {
   const [title, setTitle] = useState('');
@@ -42,7 +43,7 @@ export default function UploadTask() {
     attachments.forEach((file) => formData.append('attachments', file));
 
     try {
-      const res = await fetch('http://localhost:4000/task', {
+      const res = await fetch(`${API_URL}/task`, {
         method: 'POST',
         body: formData,
         credentials: 'include',

@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { formatDate } from '../helper';
 import { UserContext } from '../UserContext';
 import './SingleTaskPage.css';
+import { API_URL } from '../utils/api';
 
 export default function SingleTaskPage() {
   const { taskId } = useParams();
@@ -14,7 +15,7 @@ export default function SingleTaskPage() {
 
   useEffect(() => {
     const loadTask = async () => {
-      const response = await fetch(`http://localhost:4000/task/${taskId}`, {
+      const response = await fetch(`${API_URL}/task/${taskId}`, {
         method: 'GET',
         credentials: 'include',
       });

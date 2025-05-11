@@ -2,13 +2,14 @@ import { useContext, useState } from 'react';
 import './ProfilePage.css';
 import { UserContext } from '../UserContext';
 import { Navigate } from 'react-router-dom';
+import { API_URL } from '../utils/api';
 
 export default function ProfilePage() {
   const { userInfo, setUserInfo } = useContext(UserContext);
   const [redirect, setRedirect] = useState(false);
 
   async function logout() {
-    await fetch('http://localhost:4000/auth/logout', {
+    await fetch(`${API_URL}/auth/logout`, {
       method: 'POST',
       credentials: 'include',
     });

@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import './TasksVisitedPage.css';
 import { UserContext } from '../UserContext';
-import HandleTaskPage from '../HandleTask';
+import { API_URL } from '../utils/api';
 
 export default function TasksVisitedPage() {
   const { userId } = useParams();
@@ -12,12 +12,9 @@ export default function TasksVisitedPage() {
 
   useEffect(() => {
     const loadTasksVisited = async () => {
-      const response = await fetch(
-        `http://localhost:4000/task/visited/${userId}`,
-        {
-          method: 'GET',
-        }
-      );
+      const response = await fetch(`${API_URL}/task/visited/${userId}`, {
+        method: 'GET',
+      });
       if (response.ok) {
         const data = await response.json();
         setTasksVisited(data.tasksVisited);
@@ -34,7 +31,7 @@ export default function TasksVisitedPage() {
   };
 
   const undoSubmission = async (taskId) => {
-    const response = await fetch(`http://localhost:4000/task/undo/${taskId}`, {
+    const response = await fetch(`${API_URL}/task/undo/${taskId}`, {
       credentials: 'include',
       method: 'DELETE',
       headers: {

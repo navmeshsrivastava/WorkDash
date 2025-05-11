@@ -2,6 +2,7 @@ import { useContext, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { UserContext } from '../UserContext';
 import './LoginPage.css';
+import { API_URL } from '../utils/api';
 
 export default function LoginPage() {
   let [username, setUsername] = useState('');
@@ -13,7 +14,7 @@ export default function LoginPage() {
     evt.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:4000/auth/login', {
+      const response = await fetch(`${API_URL}/auth/login`, {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },

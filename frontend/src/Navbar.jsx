@@ -5,6 +5,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
 import { UserContext } from './UserContext';
 import './Navbar.css';
+import { API_URL } from '../utils/api';
 
 export default function Navbar() {
   const { userInfo, setUserInfo } = useContext(UserContext);
@@ -13,7 +14,7 @@ export default function Navbar() {
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
-        const response = await fetch('http://localhost:4000/auth/load', {
+        const response = await fetch(`${API_URL}/auth/load`, {
           method: 'GET',
           credentials: 'include',
         });
