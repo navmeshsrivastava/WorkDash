@@ -2,7 +2,7 @@ import { useEffect, useState, useContext } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
 import { UserContext } from './UserContext';
 import EditCodeTask from './pages/EditCodeTask';
-import { API_URL } from '../utils/api';
+import { API_URL } from './utils/api';
 
 export default function HandleTaskEdit() {
   const { taskId } = useParams();
