@@ -18,19 +18,29 @@ export default function EditCodeTask({ task }) {
   };
 
   const handleSubmit = async () => {
-    const response = await fetch(`${API_URL}/task/${taskId}`, {
-      method: 'PUT',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        solution: code,
-        userId: userInfo.id,
-      }),
-    });
-    if (response.ok) {
+    try {
+      const response = await fetch(`${API_URL}/task/${taskId}`, {
+        method: 'PUT',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          solution: code,
+          userId: userInfo.id,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        alert(errorData.error || 'Something went wrong');
+        return;
+      }
+
       setRedirect(true);
+    } catch (err) {
+      console.error(err);
+      alert('Server error. Please try again later.');
     }
   };
 

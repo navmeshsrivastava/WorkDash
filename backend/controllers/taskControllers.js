@@ -10,7 +10,7 @@ exports.getAllTasks = async (req, res) => {
     res.status(200).json(tasks);
   } catch (error) {
     console.error('Failed to fetch tasks:', error);
-    res.status(500).json({ error: 'Failed to fetch tasks' });
+    res.status(500).json({ error: 'Something went wrong' });
   }
 };
 
@@ -57,7 +57,7 @@ exports.getTaskById = async (req, res) => {
 
     res.status(200).json(task);
   } catch (error) {
-    res.status(500).json({ error: 'Server error' });
+    res.status(500).json({ error: 'Something went wrong' });
   }
 };
 
@@ -84,7 +84,7 @@ exports.getTaskForEdit = async (req, res) => {
     return res.status(200).json(taskObj);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: 'Server error' });
+    res.status(500).json({ error: 'Something went wrong' });
   }
 };
 
@@ -127,7 +127,7 @@ exports.submitTaskSolution = async (req, res) => {
     });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: 'Server error' });
+    res.status(500).json({ error: 'Something went wrong' });
   }
 };
 
@@ -159,7 +159,7 @@ exports.updateTaskSolution = async (req, res) => {
     res.json({ success: true, updatedEntry: doneEntry });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: 'Server error' });
+    res.status(500).json({ error: 'Something went wrong' });
   }
 };
 
@@ -178,7 +178,7 @@ exports.undoTaskSubmission = async (req, res) => {
     res.status(200).json({ success: 'Task Undo Completed' });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: 'Something went wrong' });
   }
 };
 
@@ -209,7 +209,7 @@ exports.deleteTask = async (req, res) => {
     res.status(200).json({ success: 'Task deleted successfully' });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: 'Something went wrong' });
   }
 };
 
@@ -227,10 +227,14 @@ exports.getTasksCreatedByUser = async (req, res) => {
       },
     });
 
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
     res.json({ tasksPosted: user.tasksPosted });
   } catch (error) {
     console.error('Error fetching tasks:', error);
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: 'Something went wrong' });
   }
 };
 
@@ -261,6 +265,6 @@ exports.getTasksDoneByUser = async (req, res) => {
     res.status(200).json({ tasksVisited });
   } catch (error) {
     console.error('Error fetching tasks:', error);
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: 'Something went wrong' });
   }
 };

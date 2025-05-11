@@ -16,12 +16,23 @@ export default function TasksCreatedPage() {
           method: 'GET',
           credentials: 'include',
         });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          alert(`Error: ${errorData.message || 'Failed to load tasks'}`);
+          return;
+        }
+
         const data = await response.json();
-        setTasks(data.tasksPosted);
+        setTasks(data.tasksPosted || []);
       } catch (error) {
         console.error('Failed to load tasks:', error);
+        alert(
+          'Something went wrong while fetching tasks. Please try again later.'
+        );
       }
     };
+
     loadTasksCreated();
   }, [userId]);
 
@@ -46,18 +57,24 @@ export default function TasksCreatedPage() {
         credentials: 'include',
       });
 
-      if (response.ok) {
-        alert('Task deleted successfully');
-        setTasks((prevTasks) =>
-          prevTasks.filter((task) => task._id !== taskId)
-        );
-      } else {
-        const data = await response.json();
-        alert(`Failed to delete task: ${data.error || 'Unknown error'}`);
+      const data = await response.json();
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          alert('Unauthorized: You are not allowed to delete this task.');
+        } else if (response.status === 404) {
+          alert('Task not found. It may have already been deleted.');
+        } else {
+          alert(`Failed to delete task: ${data.error || 'Unknown error'}`);
+        }
+        return;
       }
+
+      alert(' Task deleted successfully!');
+      setTasks((prevTasks) => prevTasks.filter((task) => task._id !== taskId));
     } catch (error) {
-      alert('Something went wrong while deleting the task');
       console.error(error);
+      alert(' Something went wrong while deleting the task. Please try again.');
     }
   };
 

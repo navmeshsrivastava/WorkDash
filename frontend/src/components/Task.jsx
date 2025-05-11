@@ -39,8 +39,8 @@ export default function Task({ task }) {
           <AccountCircleIcon />
         </div>
         <div>
-          <p>{postedBy.name}</p>
-          <p>{postedBy.role}</p>
+          <p>{postedBy?.name || 'Unknown User'}</p>
+          <p>{postedBy?.role || 'Unknown Role'}</p>
         </div>
       </div>
       <div className="tasks-tools">

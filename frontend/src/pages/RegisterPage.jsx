@@ -15,19 +15,26 @@ export default function RegisterPage() {
 
   async function register(ev) {
     ev.preventDefault();
-    const response = await fetch(`${API_URL}/auth/register`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, username, role, email, password }),
-      credentials: 'include',
-    });
-    if (response.ok) {
-      const data = await response.json();
-      setUserInfo(data);
-      setRedirect(true);
-      alert('Registration Successful.');
-    } else {
-      alert('Registration Failed.');
+    try {
+      const response = await fetch(`${API_URL}/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, username, role, email, password }),
+        credentials: 'include',
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setUserInfo(data);
+        setRedirect(true);
+        alert('Registration Successful.');
+      } else {
+        const errorData = await response.json();
+        alert(errorData.error || 'Registration Failed.');
+      }
+    } catch (err) {
+      console.error('Registration request failed:', err);
+      alert('Something went wrong. Please try again later.');
     }
   }
 

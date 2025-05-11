@@ -25,11 +25,15 @@ export default function HandleTaskEdit() {
           const data = await res.json();
           setTask({ ...data, type: 'code', edit: true });
         } else {
-          alert('Unauthorized action performed');
+          const data = await res.json();
+          alert(data.failed || 'Unauthorized action performed');
           setRedirect(true);
         }
       } catch (error) {
         console.error('Error fetching task:', error);
+        alert(
+          'An error occurred while fetching the task. Please try again later.'
+        );
       }
     };
 

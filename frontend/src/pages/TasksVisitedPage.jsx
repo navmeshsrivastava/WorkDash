@@ -12,14 +12,27 @@ export default function TasksVisitedPage() {
 
   useEffect(() => {
     const loadTasksVisited = async () => {
-      const response = await fetch(`${API_URL}/task/visited/${userId}`, {
-        method: 'GET',
-      });
-      if (response.ok) {
+      try {
+        const response = await fetch(`${API_URL}/task/visited/${userId}`, {
+          method: 'GET',
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          alert(errorData.message || 'Failed to load visited tasks.');
+          return;
+        }
+
         const data = await response.json();
         setTasksVisited(data.tasksVisited);
+      } catch (error) {
+        console.error('Fetch error:', error);
+        alert(
+          'Something went wrong while loading visited tasks. Please try again later.'
+        );
       }
     };
+
     loadTasksVisited();
   }, [userId]);
 
@@ -31,20 +44,29 @@ export default function TasksVisitedPage() {
   };
 
   const undoSubmission = async (taskId) => {
-    const response = await fetch(`${API_URL}/task/undo/${taskId}`, {
-      credentials: 'include',
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ userId: userInfo.id }),
-    });
+    try {
+      const response = await fetch(`${API_URL}/task/undo/${taskId}`, {
+        credentials: 'include',
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId: userInfo.id }),
+      });
 
-    if (response.ok) {
+      if (!response.ok) {
+        const errorData = await response.json();
+        alert(errorData.error || 'Failed to undo task submission.');
+        return;
+      }
+
       alert('Task Undo Completed');
       setTasksVisited((prevTasks) =>
         prevTasks.filter((task) => task._id !== taskId)
       );
+    } catch (error) {
+      console.error(error);
+      alert('Server error. Please try again later.');
     }
   };
 

@@ -57,11 +57,12 @@ export default function UploadTask() {
         setAttachments([]);
         setRedirect(true);
       } else {
-        alert('Upload failed');
+        const data = await res.json();
+        alert(data.error || 'Upload failed');
       }
     } catch (err) {
       console.error(err);
-      alert('Something went wrong!');
+      alert('Something went wrong! Please try again.');
     } finally {
       setLoading(false);
     }
@@ -129,41 +130,39 @@ export default function UploadTask() {
           </div>
 
           {attachments.length > 0 && (
-            <>
-              <ul
-                style={{
-                  fontSize: '0.9rem',
-                  color: 'black',
-                  listStyle: 'none',
-                  paddingLeft: 0,
-                  marginTop: '0',
-                }}
-              >
-                {attachments.map((file, index) => (
-                  <li key={index}>
-                    {file.name}{' '}
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setAttachments((prev) =>
-                          prev.filter((_, i) => i !== index)
-                        );
-                      }}
-                      style={{
-                        color: 'white',
-                        margin: '5px',
-                        padding: '5px',
-                        cursor: 'pointer',
-                        fontSize: '0.9rem',
-                        backgroundColor: 'red',
-                      }}
-                    >
-                      Remove
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </>
+            <ul
+              style={{
+                fontSize: '0.9rem',
+                color: 'black',
+                listStyle: 'none',
+                paddingLeft: 0,
+                marginTop: '0',
+              }}
+            >
+              {attachments.map((file, index) => (
+                <li key={index}>
+                  {file.name}{' '}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setAttachments((prev) =>
+                        prev.filter((_, i) => i !== index)
+                      );
+                    }}
+                    style={{
+                      color: 'white',
+                      margin: '5px',
+                      padding: '5px',
+                      cursor: 'pointer',
+                      fontSize: '0.9rem',
+                      backgroundColor: 'red',
+                    }}
+                  >
+                    Remove
+                  </button>
+                </li>
+              ))}
+            </ul>
           )}
 
           <button type="submit" disabled={loading}>

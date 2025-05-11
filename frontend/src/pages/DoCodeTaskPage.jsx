@@ -16,21 +16,32 @@ export default function DoCodeTaskPage({ task }) {
   };
 
   const handleSubmit = async () => {
-    const response = await fetch(`${API_URL}/task/${taskId}`, {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        solution: code,
-        userId: userInfo.id,
-      }),
-    });
-    if (response.ok) {
-      setRedirect(true);
+    try {
+      const response = await fetch(`${API_URL}/task/${taskId}`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          solution: code,
+          userId: userInfo.id,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setRedirect(true);
+      } else {
+        alert(data.error || 'An error occurred while submitting the task.');
+      }
+    } catch (error) {
+      console.error('Error submitting task:', error);
+      alert('An unexpected error occurred. Please try again later.');
     }
   };
+
   if (redirect) {
     return <Navigate to={`/task/${taskId}`} />;
   }
@@ -62,7 +73,7 @@ export default function DoCodeTaskPage({ task }) {
         <div className="task-action">
           <Link to={`#`}>
             <button className="submit-task-btn" onClick={handleSubmit}>
-              Sumbit Task
+              Submit Task
             </button>
           </Link>
         </div>

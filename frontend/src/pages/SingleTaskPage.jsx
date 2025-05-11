@@ -15,24 +15,36 @@ export default function SingleTaskPage() {
 
   useEffect(() => {
     const loadTask = async () => {
-      const response = await fetch(`${API_URL}/task/${taskId}`, {
-        method: 'GET',
-        credentials: 'include',
-      });
-      const data = await response.json();
-      setTask(data);
+      try {
+        const response = await fetch(`${API_URL}/task/${taskId}`, {
+          method: 'GET',
+          credentials: 'include',
+        });
 
-      if (userInfo?.id) {
-        const isManager = data.postedBy._id === userInfo.id;
-        setIsOwner(isManager);
+        if (!response.ok) {
+          const data = await response.json();
+          throw new Error(data.error || 'Failed to fetch task');
+        }
+
+        const data = await response.json();
+        setTask(data);
+
+        if (userInfo?.id) {
+          const isManager = data.postedBy._id === userInfo.id;
+          setIsOwner(isManager);
+        }
+
+        if (userInfo?.id && data.doneBy?.length) {
+          const isTaskDone = data.doneBy.some(
+            (obj) => obj.user === userInfo.id
+          );
+          setIsDone(isTaskDone);
+        }
+      } catch (error) {
+        alert(`Error: ${error.message}`);
+      } finally {
+        setLoading(false);
       }
-
-      if (userInfo?.id && data.doneBy?.length) {
-        const isTaskDone = data.doneBy.some((obj) => obj.user === userInfo.id);
-        setIsDone(isTaskDone);
-      }
-
-      setLoading(false);
     };
 
     loadTask();

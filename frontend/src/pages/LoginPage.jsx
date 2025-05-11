@@ -26,11 +26,12 @@ export default function LoginPage() {
         setUserInfo(userInfo);
         setRedirect(true);
       } else {
-        alert('Wrong credentials');
+        const errorData = await response.json();
+        alert(errorData.error || 'Login failed. Please try again.');
       }
     } catch (error) {
       console.error('Login failed:', error);
-      alert('An unexpected error occurred.');
+      alert('An unexpected error occurred. Please check your connection.');
     }
   }
 

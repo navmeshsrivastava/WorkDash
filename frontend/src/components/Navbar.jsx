@@ -12,6 +12,8 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
+    const attemptedAutoLogin = localStorage.getItem('attemptedAutoLogin');
+
     const fetchUserInfo = async () => {
       try {
         const response = await fetch(`${API_URL}/auth/load`, {
@@ -22,14 +24,22 @@ export default function Navbar() {
         if (response.ok) {
           const data = await response.json();
           setUserInfo(data);
+          localStorage.setItem('attemptedAutoLogin', 'true');
         } else if (response.status === 401) {
           setUserInfo(null);
-          console.log('No token is provided or Unauthorized');
+          if (attemptedAutoLogin === 'true') {
+            alert('Session expired or unauthorized. Please login again.');
+          }
         } else {
-          console.error('Failed to load user info. Status:', response.status);
+          if (attemptedAutoLogin === 'true') {
+            alert(`Failed to load user info. Status code: ${response.status}`);
+          }
         }
       } catch (err) {
         console.error('Error fetching user info:', err);
+        if (attemptedAutoLogin === 'true') {
+          alert('Unable to connect to server. Please check your network.');
+        }
       }
     };
 
