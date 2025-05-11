@@ -31,7 +31,14 @@ exports.register = async (req, res) => {
     };
 
     const token = createToken(payload);
-    res.cookie('token', token, { httpOnly: true }).json(payload);
+    res
+      .cookie('token', token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'None',
+        maxAge: 24 * 60 * 60 * 1000,
+      })
+      .json(payload);
   } catch (err) {
     console.error('Registration error:', err);
     res.status(500).json({ error: 'Registration failed' });
@@ -57,7 +64,14 @@ exports.login = async (req, res) => {
     };
 
     const token = createToken(payload);
-    res.cookie('token', token, { httpOnly: true }).json(payload);
+    res
+      .cookie('token', token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'None',
+        maxAge: 24 * 60 * 60 * 1000,
+      })
+      .json(payload);
   } catch (err) {
     console.error('Login error:', err);
     res.status(500).json({ error: 'Internal server error' });
