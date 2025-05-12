@@ -8,6 +8,7 @@ export default function TasksCreatedPage() {
   const [tasks, setTasks] = useState([]);
   const [openSubmissions, setOpenSubmissions] = useState({});
   const [openSolutions, setOpenSolutions] = useState({});
+  const [deletingTaskId, setDeletingTaskId] = useState(null);
 
   useEffect(() => {
     const loadTasksCreated = async () => {
@@ -51,6 +52,7 @@ export default function TasksCreatedPage() {
   };
 
   const handleDelete = async (taskId) => {
+    setDeletingTaskId(taskId);
     try {
       const response = await fetch(`${API_URL}/task/${taskId}`, {
         method: 'DELETE',
@@ -67,14 +69,17 @@ export default function TasksCreatedPage() {
         } else {
           alert(`Failed to delete task: ${data.error || 'Unknown error'}`);
         }
+        setDeletingTaskId(null);
         return;
       }
 
-      alert(' Task deleted successfully!');
+      alert('Task deleted successfully!');
       setTasks((prevTasks) => prevTasks.filter((task) => task._id !== taskId));
+      setDeletingTaskId(null);
     } catch (error) {
       console.error(error);
-      alert(' Something went wrong while deleting the task. Please try again.');
+      alert('Something went wrong while deleting the task. Please try again.');
+      setDeletingTaskId(null);
     }
   };
 
@@ -144,11 +149,10 @@ export default function TasksCreatedPage() {
               <div className="edit-delete-btns">
                 <button
                   className="delete-submissions-btn"
-                  onClick={() => {
-                    handleDelete(task._id);
-                  }}
+                  disabled={deletingTaskId === task._id}
+                  onClick={() => handleDelete(task._id)}
                 >
-                  Delete Task
+                  {deletingTaskId === task._id ? 'Deleting...' : 'Delete Task'}
                 </button>
               </div>
             </div>

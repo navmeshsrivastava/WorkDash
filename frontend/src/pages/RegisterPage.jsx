@@ -11,10 +11,12 @@ export default function RegisterPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [redirect, setRedirect] = useState(false);
+  const [loading, setLoading] = useState(false);
   const { setUserInfo } = useContext(UserContext);
 
   async function register(ev) {
     ev.preventDefault();
+    setLoading(true);
     try {
       const response = await fetch(`${API_URL}/auth/register`, {
         method: 'POST',
@@ -35,6 +37,8 @@ export default function RegisterPage() {
     } catch (err) {
       console.error('Registration request failed:', err);
       alert('Something went wrong. Please try again later.');
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -104,8 +108,8 @@ export default function RegisterPage() {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          <button type="submit" className="register-button">
-            Register
+          <button type="submit" className="register-button" disabled={loading}>
+            {loading ? 'Registering...' : 'Register'}
           </button>
         </form>
       </div>

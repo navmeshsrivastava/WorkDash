@@ -31,6 +31,10 @@ mongoose
   .then(() => console.log('Connected to DB'))
   .catch((err) => console.error('Failed to connect to DB:', err));
 
+app.get('/', (req, res) => {
+  res.status(200).send('Server is running');
+});
+
 app.use('/auth', authRoutes);
 app.use('/task', taskRoutes);
 

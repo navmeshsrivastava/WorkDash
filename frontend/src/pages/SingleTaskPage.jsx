@@ -53,7 +53,7 @@ export default function SingleTaskPage() {
   return (
     <div className="task-page-wrapper">
       {loading ? (
-        <p className="loading-text">🔄 Loading task data...</p>
+        <p className="loading-text">Loading task data...</p>
       ) : task ? (
         <>
           <h1 className="task-heading">{task.title}</h1>

@@ -10,12 +10,14 @@ export default function DoCodeTaskPage({ task }) {
   const { userInfo } = useContext(UserContext);
   const { taskId } = useParams();
   const [redirect, setRedirect] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   const handleCodeChange = (newCode) => {
     setCode(newCode);
   };
 
   const handleSubmit = async () => {
+    setSubmitting(true);
     try {
       const response = await fetch(`${API_URL}/task/${taskId}`, {
         method: 'POST',
@@ -35,10 +37,12 @@ export default function DoCodeTaskPage({ task }) {
         setRedirect(true);
       } else {
         alert(data.error || 'An error occurred while submitting the task.');
+        setSubmitting(false);
       }
     } catch (error) {
       console.error('Error submitting task:', error);
       alert('An unexpected error occurred. Please try again later.');
+      setSubmitting(false);
     }
   };
 
@@ -72,8 +76,12 @@ export default function DoCodeTaskPage({ task }) {
       {userInfo?.id && (
         <div className="task-action">
           <Link to={`#`}>
-            <button className="submit-task-btn" onClick={handleSubmit}>
-              Submit Task
+            <button
+              className="submit-task-btn"
+              onClick={handleSubmit}
+              disabled={submitting}
+            >
+              {submitting ? 'Submitting...' : 'Submit Task'}
             </button>
           </Link>
         </div>
