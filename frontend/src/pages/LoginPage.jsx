@@ -13,6 +13,7 @@ export default function LoginPage() {
 
   async function login(evt) {
     evt.preventDefault();
+    if (loading) return;
     setLoading(true);
 
     try {
@@ -47,7 +48,7 @@ export default function LoginPage() {
     <div className="login-container">
       <div className="login-form">
         <h2>Login</h2>
-        <form onSubmit={login}>
+        <form onSubmit={login} disabled={loading}>
           <label htmlFor="username">Username</label>
           <input
             type="text"
