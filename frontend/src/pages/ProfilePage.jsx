@@ -7,8 +7,10 @@ import { API_URL } from '../utils/api';
 export default function ProfilePage() {
   const { userInfo, setUserInfo } = useContext(UserContext);
   const [redirect, setRedirect] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   async function logout() {
+    setLoading(true);
     await fetch(`${API_URL}/auth/logout`, {
       method: 'POST',
       credentials: 'include',

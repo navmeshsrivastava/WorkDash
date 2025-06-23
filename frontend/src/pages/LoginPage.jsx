@@ -3,6 +3,7 @@ import { Navigate } from 'react-router-dom';
 import { UserContext } from '../UserContext';
 import './LoginPage.css';
 import { API_URL } from '../utils/api';
+import { Link } from 'react-router-dom';
 
 export default function LoginPage() {
   let [username, setUsername] = useState('');
@@ -71,7 +72,7 @@ export default function LoginPage() {
         </form>
         <div className="signup-link">
           <p>
-            Don't have an account? <a href="/register">Sign Up</a>
+            Don't have an account? <Link to="/register">Sign Up</Link>
           </p>
         </div>
       </div>

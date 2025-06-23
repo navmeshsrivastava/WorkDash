@@ -9,9 +9,12 @@ export default function TasksVisitedPage() {
   const [tasksVisited, setTasksVisited] = useState([]);
   const { userInfo } = useContext(UserContext);
   const [visibleSolution, setVisibleSolution] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [undoingId, setUndoingId] = useState(null);
 
   useEffect(() => {
     const loadTasksVisited = async () => {
+      setLoading(true);
       try {
         const response = await fetch(`${API_URL}/task/visited/${userId}`, {
           method: 'GET',
@@ -25,11 +28,14 @@ export default function TasksVisitedPage() {
 
         const data = await response.json();
         setTasksVisited(data.tasksVisited);
+        setLoading(false);
       } catch (error) {
         console.error('Fetch error:', error);
         alert(
           'Something went wrong while loading visited tasks. Please try again later.'
         );
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -44,6 +50,9 @@ export default function TasksVisitedPage() {
   };
 
   const undoSubmission = async (taskId) => {
+    if (undoingId === taskId) return;
+
+    setUndoingId(taskId);
     try {
       const response = await fetch(`${API_URL}/task/undo/${taskId}`, {
         credentials: 'include',
@@ -67,12 +76,23 @@ export default function TasksVisitedPage() {
     } catch (error) {
       console.error(error);
       alert('Server error. Please try again later.');
+    } finally {
+      setUndoingId(null);
     }
   };
+
+  if (loading) {
+    return (
+      <>
+        <p>Loading...</p>
+      </>
+    );
+  }
 
   return (
     <div className="tasks-visited-container">
       <h1 className="page-title">Tasks Visited</h1>
+
       <div className="tasks-list">
         {tasksVisited.length === 0 ? (
           <p className="no-tasks-message">You haven't visited any tasks yet.</p>
@@ -107,12 +127,12 @@ export default function TasksVisitedPage() {
               <div className="btns">
                 <button
                   className="undo-submission-btn"
-                  onClick={() => {
-                    undoSubmission(task._id);
-                  }}
+                  onClick={() => undoSubmission(task._id)}
+                  disabled={undoingId === task._id}
                 >
-                  Undo Submission
+                  {undoingId === task._id ? 'Undoing...' : 'Undo Submission'}
                 </button>
+
                 <Link to={`/task/${task._id}/edit`}>
                   <button className="undo-submission-btn">Edit solution</button>
                 </Link>

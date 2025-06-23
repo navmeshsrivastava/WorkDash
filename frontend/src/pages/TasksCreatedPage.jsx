@@ -9,6 +9,7 @@ export default function TasksCreatedPage() {
   const [openSubmissions, setOpenSubmissions] = useState({});
   const [openSolutions, setOpenSolutions] = useState({});
   const [deletingTaskId, setDeletingTaskId] = useState(null);
+  const [loading, setLoading] = useState(true); // ✅ added
 
   useEffect(() => {
     const loadTasksCreated = async () => {
@@ -31,6 +32,8 @@ export default function TasksCreatedPage() {
         alert(
           'Something went wrong while fetching tasks. Please try again later.'
         );
+      } finally {
+        setLoading(false); // ✅ done loading
       }
     };
 
@@ -52,6 +55,7 @@ export default function TasksCreatedPage() {
   };
 
   const handleDelete = async (taskId) => {
+    if (deletingTaskId) return; // ✅ prevent multiple deletions
     setDeletingTaskId(taskId);
     try {
       const response = await fetch(`${API_URL}/task/${taskId}`, {
@@ -62,43 +66,37 @@ export default function TasksCreatedPage() {
       const data = await response.json();
 
       if (!response.ok) {
-        if (response.status === 401) {
-          alert('Unauthorized: You are not allowed to delete this task.');
-        } else if (response.status === 404) {
-          alert('Task not found. It may have already been deleted.');
-        } else {
-          alert(`Failed to delete task: ${data.error || 'Unknown error'}`);
-        }
-        setDeletingTaskId(null);
+        alert(data.error || 'Failed to delete task.');
         return;
       }
 
       alert('Task deleted successfully!');
       setTasks((prevTasks) => prevTasks.filter((task) => task._id !== taskId));
-      setDeletingTaskId(null);
     } catch (error) {
       console.error(error);
-      alert('Something went wrong while deleting the task. Please try again.');
-      setDeletingTaskId(null);
+      alert('Something went wrong while deleting the task.');
+    } finally {
+      setDeletingTaskId(null); // ✅ reset
     }
   };
 
   return (
     <div className="tasks-created-page">
-      <h1 className="page-heading"> Tasks You've Created</h1>
+      <h1 className="page-heading">Tasks You've Created</h1>
 
-      {tasks.length === 0 ? (
+      {loading ? (
+        <p>Loading...</p>
+      ) : tasks.length === 0 ? (
         <p className="no-tasks-message">You haven't created any tasks yet.</p>
       ) : (
         tasks.map((task) => (
           <div className="task-card" key={task._id}>
-            <h2 className="task-title"> {task.title}</h2>
+            <h2 className="task-title">{task.title}</h2>
             <p className="description">
               {task.description.length > 150 ? (
                 <>
                   {task.description.slice(0, 150)}...
                   <Link to={`/task/${task._id}`} className="see-more-link">
-                    {' '}
                     see more
                   </Link>
                 </>
@@ -143,8 +141,8 @@ export default function TasksCreatedPage() {
                 onClick={() => toggleSubmissions(task._id)}
               >
                 {openSubmissions[task._id]
-                  ? ' Hide Submissions'
-                  : ' View Submissions'}
+                  ? 'Hide Submissions'
+                  : 'View Submissions'}
               </button>
               <div className="edit-delete-btns">
                 <button
@@ -167,13 +165,13 @@ export default function TasksCreatedPage() {
                   task.doneBy.map((submission) => (
                     <div className="submission-card" key={submission._id}>
                       <p>
-                        <strong> Name:</strong> {submission.user.name}
+                        <strong>Name:</strong> {submission.user.name}
                       </p>
                       <p>
-                        <strong> Email:</strong> {submission.user.email}
+                        <strong>Email:</strong> {submission.user.email}
                       </p>
                       <p>
-                        <strong> Completed At:</strong>{' '}
+                        <strong>Completed At:</strong>{' '}
                         {new Date(submission.completedAt).toLocaleString()}
                       </p>
                       <div className="solution-preview">
@@ -182,9 +180,7 @@ export default function TasksCreatedPage() {
                           style={{
                             color: '#1e88e5',
                             cursor: 'pointer',
-                            textDecoration: 'none',
                             marginLeft: '8px',
-                            fontSize: '1rem',
                             fontWeight: 500,
                           }}
                           onClick={() => toggleSolution(submission._id)}
