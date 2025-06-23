@@ -8,10 +8,12 @@ export default function LoginPage() {
   let [username, setUsername] = useState('');
   let [password, setPassword] = useState('');
   let [redirect, setRedirect] = useState(false);
+  let [loading, setLoading] = useState(false);
   const { setUserInfo } = useContext(UserContext);
 
   async function login(evt) {
     evt.preventDefault();
+    setLoading(true);
 
     try {
       const response = await fetch(`${API_URL}/auth/login`, {
@@ -28,10 +30,12 @@ export default function LoginPage() {
       } else {
         const errorData = await response.json();
         alert(errorData.error || 'Login failed. Please try again.');
+        setLoading(false);
       }
     } catch (error) {
       console.error('Login failed:', error);
       alert('An unexpected error occurred. Please check your connection.');
+      setLoading(false);
     }
   }
 
@@ -60,7 +64,9 @@ export default function LoginPage() {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          <button type="submit">Login</button>
+          <button type="submit" disabled={loading}>
+            Login
+          </button>
         </form>
         <div className="signup-link">
           <p>
